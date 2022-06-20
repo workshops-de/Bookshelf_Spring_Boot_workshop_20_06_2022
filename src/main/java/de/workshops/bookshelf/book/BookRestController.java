@@ -4,7 +4,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
@@ -34,5 +36,15 @@ public class BookRestController {
     @GetMapping
     List<Book> getAllBooks() {
         return books;
+    }
+
+    @GetMapping(path="{isbn}")
+    Book getByIsbn (@PathVariable String isbn) {
+        return books.stream().filter(book -> book.getIsbn().equals(isbn)).findFirst().orElseThrow();
+    }
+
+    @GetMapping(params = "author")
+    List<Book> getByAuthor(@RequestParam String author) {
+        return books.stream().filter(book -> book.getAuthor().startsWith(author)).toList();
     }
 }
