@@ -83,7 +83,7 @@
     <logger name="org.springframework.security" level="info" />
     <!-- <logger name="org.springframework.test" level="debug" /> -->
     <!-- <logger name="org.springframework.transaction" level="debug" /> -->
-    <logger name="org.springframework.web" level="debug"/>
+    <logger name="org.springframework.web" level="info"/>
 
     <!--  Used by the admin server client. -->
     <!--  <logger name="org.springframework.web.client.RestTemplate" level="warn" /> -->
