@@ -2,10 +2,9 @@ package de.workshops.bookshelf.book;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -26,6 +25,7 @@ class BookRestControllerWithWebMvcTestSliceTest {
     MockMvc mockMvc;
 
     @Test
+    @WithMockUser
     void testGettingAllBooks() throws Exception {
         when(bookServiceMock.getAllBooks()).thenReturn(List.of(new Book(), new Book(), new Book()));
         mockMvc.perform(get("/book"))
