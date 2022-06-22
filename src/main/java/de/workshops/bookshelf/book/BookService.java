@@ -2,11 +2,12 @@ package de.workshops.bookshelf.book;
 
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
 public class BookService {
-//    private final BookRepository repository;
+
     private final BookJdbcRepository repository;
 
 
