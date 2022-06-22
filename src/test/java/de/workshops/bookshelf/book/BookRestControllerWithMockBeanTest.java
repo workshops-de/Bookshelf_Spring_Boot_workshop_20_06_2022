@@ -6,25 +6,29 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultActions;
 
-import static org.hamcrest.Matchers.hasSize;
+import java.util.List;
+
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class BookRestControllerWithMockMvcTest {
+class BookRestControllerWithMockBeanTest {
 
     @Autowired
     MockMvc mockMvc;
 
+    @MockBean
+    BookService bookServiceMock;
+
     @Test
     void testGettingAllBooks() throws Exception {
-        mockMvc.perform(get("/book"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(3)));
+        when(bookServiceMock.getByAuthor(anyString())).thenReturn(List.of());
+
+        final var result = mockMvc.perform(get("/book?author=Birgit"))
+                .andExpect(status().isIAmATeapot());
     }
 }
