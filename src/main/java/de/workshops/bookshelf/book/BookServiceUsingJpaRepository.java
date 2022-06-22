@@ -5,34 +5,36 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class BookService {
-//    private final BookRepository repository;
-    private final BookJdbcRepository repository;
+public class BookServiceUsingJpaRepository {
+    private final BookJpaRepository repository;
 
-
-    public BookService(BookJdbcRepository repository) {
+    public BookServiceUsingJpaRepository(BookJpaRepository repository) {
         this.repository = repository;
     }
 
     List<Book> getAllBooks() {
-        return repository.getAllBooks();
+        return repository.findAll();
     }
 
     Book getByIsbn(String isbn) throws BookNotFoundException {
-        return repository.getAllBooks().stream().filter(book -> book.getIsbn().equals(isbn)).findFirst().orElseThrow(BookNotFoundException::new);
+        final var book = repository.findByIsbn(isbn);
+        if (book == null) {
+            throw new BookNotFoundException();
+        }
+        return book;
     }
 
     List<Book> getByAuthor(String author) {
-        return repository.getAllBooks().stream().filter(book -> book.getAuthor().startsWith(author)).toList();
+        return repository.findAll().stream().filter(book -> book.getAuthor().startsWith(author)).toList();
     }
 
     List<Book> searchBooks(BookSearch bookSearch) {
-        return repository.getAllBooks().stream().filter(
+        return repository.findAll().stream().filter(
                 book -> book.getAuthor().startsWith(bookSearch.getAuthorName())
                         || book.getIsbn().equals(bookSearch.getIsbn())).toList();
     }
 
     void addBook (Book book) {
-        repository.createBook(book);
+        repository.save(book);
     }
 }

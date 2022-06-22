@@ -12,13 +12,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.net.URI;
 import java.util.List;
 
 @RestController
 @RequestMapping("book")
 public class BookRestController {
     private final BookService service;
+//    private final BookServiceUsingJpaRepository service;
 
+//    public BookRestController(BookServiceUsingJpaRepository service) {
+//        this.service = service;
+//    }
     public BookRestController(BookService service) {
         this.service = service;
     }
@@ -50,6 +55,12 @@ public class BookRestController {
             throw new BookNotFoundException();
         }
         return ResponseEntity.ok(foundBooks);
+    }
+
+    @PostMapping
+    ResponseEntity<Void> addBook(@RequestBody Book book) {
+        service.addBook(book);
+        return ResponseEntity.created(URI.create("/book/" + book.getIsbn())).build();
     }
 
     @ExceptionHandler(BookNotFoundException.class)
